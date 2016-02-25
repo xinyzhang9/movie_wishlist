@@ -31,7 +31,8 @@ class UsersController < ApplicationController
     # puts data.inspect
     @movie_title = params[:movie_title]
     @movie_id = params[:movie_id]
-    (session[:movie_list] ||= []) << (params[:movie_title] unless session[:movie_list].include?params[:movie_title])
+    (session[:movie_list] ||= []) << (params[:movie_title] if !session[:movie_list].include?params[:movie_title])
+      session[:movie_list] = session[:movie_list]-[nil]
     render :json => { 
          :movie_title => @movie_title, 
          :movie_id => @movie_id

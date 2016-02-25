@@ -14,8 +14,9 @@
          
       },
          type: 'POST',
-        success: function(data){
-          $("#user_cart").append(data.movie_title+ ' ');
+        success: function(res){
+        str = '<a href = "/users/delete_item/'+res.movie_id+'">'+res.movie_title+"</a>"
+          $("#user_cart").append(str);
       }
 
     })
