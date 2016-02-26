@@ -1,10 +1,12 @@
 Rails.application.routes.draw do
+  delete 'temps/:id' => 'temps#destroy'
+
   root 'session#index'
   get 'session' =>'session#index'
   get 'session/create'
 
   get 'session/destroy'
-
+get 'users/wishlist' => "users#wishlist"
   get 'users/index'
   get 'users/:id' =>'users#show'
   get 'users/:id/set_up' =>'users#set_up'
@@ -15,6 +17,11 @@ Rails.application.routes.draw do
   post 'users/carts'=>'users#carts'
   post 'session'=>'session#create'
   delete 'session'=>'session#destroy'
+
+  get 'users' => "users#set_up"
+
+  
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

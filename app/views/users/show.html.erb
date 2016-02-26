@@ -1,5 +1,9 @@
 <h1>User dashboard</h1>
-<% content_for :jquery do %>
-   console.log('I am here!');
-   console.log(<%=@emoji%>)
+<% content_for :jquery1 do %>
+   $.get('/users/wishlist',function(data){
+   $("#result").html(data)
+   return false;
+})
 <% end %>
+
+<div id = "result"></div>

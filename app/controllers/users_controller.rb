@@ -14,14 +14,36 @@ class UsersController < ApplicationController
       @user.save
       $counter = 1
       session[:user_id] = @user.id
-      render :set_up
+      redirect_to :controller=>'users',:action =>'set_up',:id=>current_user.id
     end
   end
 
   def show
+
+  end
+
+  def wishlist
+    if !@arr
+      @arr = []
+    end
+    @temps = current_user.temps
+    @temps.each do |t|
+        tt = t.genre_ids[1..t.genre_ids.length-1]
+        tt_array = tt.split(",").map{ |s| s.to_i }
+       @arr += tt_array.flatten
+    end
+
+    if !@map
+      @map = Hash.new(0)
+    end
+    @arr.each{ |i| @map[i] += 1 }
+
+   puts @map.inspect
+
   end
 
   def set_up
+    session[:temps] = current_user.temps
     ApisController.get_top_movie
 
 
@@ -31,12 +53,28 @@ class UsersController < ApplicationController
     # puts data.inspect
     @movie_title = params[:movie_title]
     @movie_id = params[:movie_id]
-    (session[:movie_list] ||= []) << (params[:movie_title] if !session[:movie_list].include?params[:movie_title])
-      session[:movie_list] = session[:movie_list]-[nil]
+    @movie_genre_ids = params[:movie_genre_ids]
+    @pic = params[:movie_pic]
+    # (session[:movie_title_list] ||= []) << (params[:movie_title] if !session[:movie_title_list].include?params[:movie_title])
+    #   session[:movie_title_list] = session[:movie_title_list]-[nil]
+    if current_user.temps.find_by_movie_id(@movie_id)==nil
+      @temp = Temp.new(title:@movie_title,movie_id:@movie_id,genre_ids:@movie_genre_ids,pic:@pic,user:current_user)
+      @temp.save
+    end
+
+    session[:temps] = current_user.temps
+    puts session[:temps]
     render :json => { 
-         :movie_title => @movie_title, 
-         :movie_id => @movie_id
+         # :movie_title => @movie_title, 
+         # :movie_id => @movie_id,
+         # :movie_title_list => session[:movie_title_list],
+         # :movie_genre_ids => @movie_genre_ids
+         :msg => "success"
       }
+  end
+
+  def save_fav_list
+
   end
   private
   def user_params

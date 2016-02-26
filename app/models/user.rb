@@ -1,5 +1,10 @@
 class User < ActiveRecord::Base
   has_secure_password
+  has_many :favs
+  has_many :genres, through: :favs
+  has_many :temps
+
+
   EMAIL_REGEX = /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]+)\z/i
   validates :first_name,:last_name,:email,:password, presence: true
   validates :password, length: {minimum:8}
