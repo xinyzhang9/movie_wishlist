@@ -19,7 +19,8 @@ class UsersController < ApplicationController
   end
 
   def show
-
+    session[:temps] = current_user.temps
+    ApisController.get_recomend
   end
 
   def wishlist
@@ -39,6 +40,11 @@ class UsersController < ApplicationController
     @arr.each{ |i| @map[i] += 1 }
 
    puts @map.inspect
+   @top_genre_name = Genre.find_by_genre_id(@map.key(@map.values.max)).name
+   session[:top_genre_id] = @map.key(@map.values.max)
+   render :json => { 
+         :top => @top_genre_name
+      }
 
   end
 
@@ -73,9 +79,6 @@ class UsersController < ApplicationController
       }
   end
 
-  def save_fav_list
-
-  end
   private
   def user_params
     params.require(:user).permit(:email,:first_name,:last_name,:password,:password_confirmation)

@@ -7,6 +7,7 @@ class SessionController < ApplicationController
   	user = User.find_by_email(email)
   	if user && user.authenticate(params[:password])
   		session[:user_id] = user.id
+      # session[:top_genre_id] = 12
 
   		redirect_to "/users/#{current_user.id}"
   	else
@@ -17,6 +18,7 @@ class SessionController < ApplicationController
 
   def destroy
   	reset_session
+    $recommended_movies = nil
   	redirect_to "/session"
   end
 end

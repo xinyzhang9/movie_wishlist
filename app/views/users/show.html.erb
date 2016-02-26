@@ -1,9 +1,58 @@
 <h1>User dashboard</h1>
 <% content_for :jquery1 do %>
    $.get('/users/wishlist',function(data){
-   $("#result").html(data)
-   return false;
+   $("#result").html(data.top)
 })
 <% end %>
 
-<div id = "result"></div>
+<div>
+	<h4>Your favorite genre of movie is: <span id = "result"></span> </h4>
+	<% if session[:top_genre_id] %>
+		<a href="/apis/get_top_genre_movie/<%=session[:top_genre_id]%>" class = 'btn btn-success'>I'm feeling lucky</a>
+	<%end%>
+</div>
+<div class="container col-sm-12">
+   <div class='col-sm-8'>
+   </div>
+  <div class="row col-sm-12">
+  <% if  $recommended_movies %>
+      <div class="col-sm-8" >
+        <% $recommended_movies['results'].each do |m| %>
+        <div class="col-sm-6">
+          <h3><%=m['title']%></h3>
+          <a href="#" data-toggle="popover" data-html ='true' title="<h4>Movie Overview</h4>" data-placement="bottom" data-trigger="focus" data-content="<p><b><%=m['overview']%></b></p>">
+          <img src='http://image.tmdb.org/t/p/w500<%= m['poster_path'] %>' alt="<%=m['title']%>"width="300" id="<%=m['id']%>" genreids = "<%=m['genre_ids']%>"/>
+          </a>
+        </div>
+        <%end%>
+      </div>
+  <%end%>
+	<div class="row col-sm-4">
+	    <div id = 'user_cart'>
+	      <% if session[:temps] %>
+	      <label for="cart">your liked movies</label>
+	      <table class = "table" id = "cart">
+	        <tr>
+	          <th>movie</th>
+	          <th>action</th>
+	        </tr>
+	        <% session[:temps].each do |t|%>
+	        <tr>
+	          <td> <img src="<%=t.pic%>" alt="p" width = "100"> </td>
+	          <td>
+	            <form action = "/temps/<%=t.id%>" method = "post">
+	              <input type="hidden" name = "authenticity_token" value = "<%=form_authenticity_token%>">
+	              <input type="hidden" name = "_method" value = "delete">
+	              <input type="submit" value = "remove" class = "btn btn-danger">
+	                  
+	            </form>
+	          </td>
+	        </tr>
+	        <%end%>
+	      </table>
+	        
+	      <%end%>
+	    </div>
+	</div>
+  </div>
+</div>

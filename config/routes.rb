@@ -13,6 +13,8 @@ get 'users/wishlist' => "users#wishlist"
   get  'apis/top_moive' =>'apis#get_top_movie'
   get 'apis/top_moive/next'=>'apis#top_rated_next'
   get 'apis/top_moive/prev'=>'apis#top_rated_prev'
+  get 'apis/get_top_genre_movie/:id' => 'apis#get_top_genre_movie'
+
   post 'users' => 'users#create'
   post 'users/carts'=>'users#carts'
   post 'session'=>'session#create'
@@ -20,7 +22,7 @@ get 'users/wishlist' => "users#wishlist"
 
   get 'users' => "users#set_up"
 
-  
+
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
