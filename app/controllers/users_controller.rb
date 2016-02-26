@@ -19,6 +19,7 @@ class UsersController < ApplicationController
   end
 
   def show
+    @temps = current_user.temps
     session[:temps] = current_user.temps
     ApisController.get_recomend
   end
@@ -69,14 +70,18 @@ class UsersController < ApplicationController
     end
 
     session[:temps] = current_user.temps
-    puts session[:temps]
-    render :json => { 
-         # :movie_title => @movie_title, 
-         # :movie_id => @movie_id,
-         # :movie_title_list => session[:movie_title_list],
-         # :movie_genre_ids => @movie_genre_ids
-         :msg => "success"
-      }
+
+    if params[:from] == "form"
+      redirect_to :back
+    else
+      render :json => { 
+           # :movie_title => @movie_title, 
+           # :movie_id => @movie_id,
+           # :movie_title_list => session[:movie_title_list],
+           # :movie_genre_ids => @movie_genre_ids
+           :msg => "success"
+        }
+    end
   end
 
   private
