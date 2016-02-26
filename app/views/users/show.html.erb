@@ -3,6 +3,33 @@
    $.get('/users/wishlist',function(data){
    $("#result").html(data.top)
 })
+
+$('img').click(function(event){
+      event.preventDefault(); 
+      movie_id = $(this).attr('id')
+      movie_title = $(this).attr('alt')
+      movie_genre_ids = $(this).attr('genreids')
+      movie_pic = $(this).attr('src')
+      $.ajax({
+        url:"/users/carts",
+        data:{
+          movie_id:movie_id,
+          movie_title:movie_title,
+          movie_genre_ids:movie_genre_ids,
+          movie_pic:movie_pic
+         
+      },
+         type: 'POST',
+        success: function(res){
+          //$("#user_cart").html(res.movie_title_list);
+          $("#ajax_result").html(res.msg);
+          location.reload()
+      }
+
+    })
+    //return false;
+  })
+  
 <% end %>
 
 <div>
